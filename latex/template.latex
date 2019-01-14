@@ -1,0 +1,201 @@
+\documentclass[letterpaper, 10pt]{memoir}
+
+\usepackage[english]{babel}
+\usepackage{float}
+\floatplacement{figure}{H}       % default figure placement (H)
+\usepackage{geometry}
+\usepackage{graphicx}
+\graphicspath{{../}}
+\usepackage[hidelinks]{hyperref} % hide ugly hyperlink boxes
+\usepackage{mathpazo}            % palatino font
+\usepackage{multicol}
+\usepackage{xcolor}              % for colors
+
+
+%% Set margins
+\setlrmarginsandblock{1.5in} {1in}   {*}
+\setulmarginsandblock{1.25in}{1.25in}{*}
+\checkandfixthelayout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Headers and footers
+
+\copypagestyle{myruled}{ruled}
+\addtopsmarks{myruled}{}{
+  \createmark{section}   {left} {shownumber}{}{. \ }
+  \createmark{subsection}{right}{shownumber}{}{. \ }
+}
+%% footer rule
+\makefootrule{myruled}{\textwidth}{\normalrulethickness}{\footruleskip}
+\pagestyle{myruled}
+
+% END Headers and footers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Section heading formatting
+
+\usepackage{helvet}
+\usepackage{titlesec}
+\definecolor{subsection-color} {HTML}{435489}
+
+\titleformat*{\section}{\Huge\bfseries}
+\titleformat*{\subsection}{\fontfamily{phv}\selectfont\Large\color{subsection-color}\bfseries}
+\titleformat*{\subsubsection}{\large}
+\titleformat*{\paragraph}{\normalsize\scshape\bfseries}
+%% To make uppercase:
+%\titleformat{\paragraph}[runin]{\fontfamily{phv}\selectfont\normalsize\uppercase}{}{0px}{}
+\titleformat*{\subparagraph}{\normalsize\bfseries}
+
+%% Each section begins on a new page
+\newcommand{\sectionbreak}{\clearpage}
+
+%% Each subsection (each rule) begins on a new page
+%\newcommand{\subsectionbreak}{\clearpage}
+
+%% Add some space before subsubsections
+%\titlespacing*{\subsection}{0pt}{15ex plus 5ex minus 3ex}{2.3ex plus .2ex}
+\titlespacing*{\subsubsection}{0pt}{7.5ex plus 3ex minus 1ex}{2.3ex plus .2ex}
+
+%% Remove heading indentation for paragraphs and subparagraphs
+\setparaindent{0pt}
+\setsubparaindent{0pt}
+
+%% Remove section numbering
+\renewcommand{\chapternumberline}[1]{}% Remove chapter number in ToC
+\setcounter{secnumdepth}{0}
+\counterwithout{section}{chapter}
+%% Remove chapter headings
+\makechapterstyle{section}{%
+   \renewcommand*{\printchaptername}{}
+   \renewcommand*{\chapternamenum}{}
+   \renewcommand*{\chapnumfont}{\chaptitlefont}
+   \renewcommand*{\printchapternum}{}
+   \renewcommand*{\afterchapternum}{}
+}
+\chapterstyle{section}
+
+% END Section heading formatting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Listings
+
+\usepackage{listings}
+\newcommand{\passthrough}[1]{#1}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+%% Custom listings style
+% Eisvogel
+\definecolor{listing-background} {HTML}{FFFFFF}
+\definecolor{listing-rule}       {HTML}{B3B2B3}
+\definecolor{listing-numbers}    {HTML}{174781}
+\definecolor{listing-text-color} {HTML}{000000}
+\definecolor{listing-keyword}    {HTML}{435489}
+\definecolor{listing-identifier} {HTML}{212121}
+\definecolor{listing-string}     {HTML}{A8601A}
+\definecolor{listing-comment}    {HTML}{357B42}
+
+\lstdefinestyle{c++-listing-style}{
+  language         = c++,
+  xleftmargin      = 0.5em,
+  framexleftmargin = 0.4em,
+  backgroundcolor  = \color{listing-background},
+  rulecolor        = \color{listing-rule},
+  numberstyle      = \color{listing-numbers},
+  keywordstyle     = \color{listing-keyword}\bfseries,
+  identifierstyle  = \color{listing-identifier},
+  commentstyle     = \color{listing-comment},
+  stringstyle      = \color{listing-string},
+  basicstyle       = \color{listing-text-color}\footnotesize\ttfamily{}\linespread{1.15},
+  breaklines       = true,
+  frame            = single,
+  framesep         = 0.6mm,
+  frameround       = ffff,
+  tabsize          = 4,
+  aboveskip        = 1.0em,
+  belowcaptionskip = 1.0em,
+  classoffset      = 0,
+  sensitive        = true,
+  showstringspaces = false
+}
+
+\lstset{style=c++-listing-style}
+
+%% Listing spacing (its own paragraph that doesn't break across pages)
+\usepackage{etoolbox}
+\BeforeBeginEnvironment{lstlisting}{\mbox{}\par\noindent\begin{minipage}{\linewidth}}
+\AfterEndEnvironment{lstlisting}{\end{minipage}\par\addvspace{\topskip}}
+
+%% Source Code Pro for monospace text
+\usepackage{sourcecodepro}
+
+% END Listings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Don't use inline code blocks
+\renewcommand{\texttt}{}
+
+\input{variables}
+
+\begin{document}
+
+%% Select Palatino font
+\fontfamily{ppl}\selectfont
+
+%% Title page
+\begin{titlingpage}
+  \newgeometry{left=1.5in, right=1.5in}
+  \begin{center}
+    \begin{figure}[H]
+      \vspace{1in}
+      \includegraphics[width=\textwidth]{cpp_core_guidelines_logo_text.png}
+    \end{figure}
+    \vspace{4.5in}
+    \begin{flushright}
+      {\fontfamily{phv}
+        {\large
+          Version \docversion
+
+          \commitdate
+        }
+      }
+    \end{flushright}
+  \end{center}
+\end{titlingpage}
+
+%% Copyright page
+\noindent\begin{minipage}{\textwidth}
+\setlength{\parskip}{\baselineskip}
+\footnotesize
+Latex typesetting based on \textit{The Memoir Class for Configurable Typesetting} by Peter R. Wilson and Lars Madsen.
+
+Created from Git commit \commit \dirty, which was created on \commitdate.
+
+\license
+
+\end{minipage}
+\clearpage
+
+%% Contributors page
+{\noindent\huge\textbf{Contributors}}
+
+The following contributed to these guidelines, grouped by total number of commits and listed alphabetically:
+
+\begin{multicols}{4}
+  {\noindent\tiny\contributors}
+\end{multicols}
+\clearpage
+
+%% Table of contents
+\setcounter{tocdepth}{3}
+\renewcommand\cftsubsectionfont{\normalfont\itshape}
+\tableofcontents
+\clearpage
+
+$body$
+
+\end{document}
